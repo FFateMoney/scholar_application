@@ -1,0 +1,3 @@
+[submodule "AutoScholar"]
+	path = AutoScholar
+	url = https://github.com/FFateMoney/AutoScholar.git
