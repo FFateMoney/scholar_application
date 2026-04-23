@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AutoScholar Studio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=IBM+Plex+Mono:wght@400;500&family=Manrope:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">Local Research Service</p>
+          <h1>AutoScholar Studio</h1>
+          <p class="hero-text">
+            Submit research prompts or source papers, keep the user-facing interaction simple, and
+            inspect Codex internals only when we need them during development.
+          </p>
+        </div>
+        <div class="hero-status">
+          <div class="status-chip">
+            <span class="status-dot" id="health-dot"></span>
+            <span id="health-text">Checking backend...</span>
+          </div>
+          <label class="backend-label" for="backend-url">Backend URL</label>
+          <input id="backend-url" class="backend-input" type="text" />
+          <button id="refresh-health" class="ghost-button" type="button">Refresh</button>
+        </div>
+      </header>
+
+      <main class="workspace">
+        <section class="composer">
+          <div class="panel-header">
+            <div>
+              <p class="panel-kicker">Input</p>
+              <h2>Start A Job</h2>
+            </div>
+            <div class="tab-row" role="tablist" aria-label="Job types">
+              <button class="tab-button active" data-tab="idea" type="button">Idea Report</button>
+              <button class="tab-button" data-tab="reference" type="button">Reference Bib</button>
+            </div>
+          </div>
+
+          <section class="tab-panel active" data-panel="idea">
+            <form id="idea-form" class="stack-form">
+              <label class="field">
+                <span>Research Brief</span>
+                <textarea
+                  name="brief"
+                  rows="8"
+                  placeholder="示例：我是计算机专业的，想做开放世界视觉持续学习，重点关注模型如何在遇到未知样本时更稳健地拒识，并在确认后安全地扩展到新类别。"
+                  required
+                ></textarea>
+                <small class="field-hint">
+                  只需要说清楚你的领域，以及你想做的事情。写成一段自然语言即可。
+                </small>
+              </label>
+              <label class="field inline-field">
+                <span>Language</span>
+                <select name="language">
+                  <option value="zh">zh</option>
+                  <option value="en">en</option>
+                </select>
+              </label>
+              <button class="primary-button" type="submit">Generate Idea Report</button>
+            </form>
+          </section>
+
+          <section class="tab-panel" data-panel="reference">
+            <form id="reference-form" class="stack-form">
+              <label class="field">
+                <span>Paper Source</span>
+                <input name="file" type="file" accept=".pdf,.tex,.txt" required />
+              </label>
+              <label class="field inline-field">
+                <span>Language</span>
+                <select name="language">
+                  <option value="zh">zh</option>
+                  <option value="en">en</option>
+                </select>
+              </label>
+              <button class="primary-button" type="submit">Generate BibTeX</button>
+            </form>
+          </section>
+        </section>
+
+        <section class="results-grid">
+          <article class="glass-panel">
+            <div class="panel-header compact">
+              <div>
+                <p class="panel-kicker">Input Snapshot</p>
+                <h2>User Request</h2>
+              </div>
+              <span id="job-badge" class="job-badge idle">No Active Job</span>
+            </div>
+            <div id="input-summary" class="summary-card empty-state">
+              Submit a job to capture the exact user input that produced the output.
+            </div>
+          </article>
+
+          <article class="glass-panel">
+            <div class="panel-header compact">
+              <div>
+                <p class="panel-kicker">Output</p>
+                <h2>Final Result</h2>
+              </div>
+              <a id="download-link" class="ghost-button disabled-link" href="#" target="_blank"
+                >Download</a
+              >
+            </div>
+            <div id="output-shell" class="output-shell">
+              <div id="output-meta" class="meta-strip">
+                Waiting for a completed job.
+              </div>
+              <div id="output-preview" class="output-preview empty-state">
+                No output yet.
+              </div>
+            </div>
+          </article>
+        </section>
+
+        <section class="timeline-panel glass-panel">
+          <div class="panel-header compact">
+            <div>
+              <p class="panel-kicker">Progress</p>
+              <h2>Job Timeline</h2>
+            </div>
+            <button id="refresh-job" class="ghost-button" type="button">Refresh Status</button>
+          </div>
+          <div id="timeline" class="timeline empty-state">No job in progress.</div>
+        </section>
+
+        <section id="debug-shell" class="debug-shell glass-panel hidden">
+          <div class="panel-header compact">
+            <div>
+              <p class="panel-kicker">Development Only</p>
+              <h2>Codex Debug Console</h2>
+            </div>
+            <button id="toggle-debug" class="ghost-button" type="button">Hide Console</button>
+          </div>
+          <div class="debug-toolbar">
+            <div class="tab-row debug-tabs">
+              <button class="tab-button active" data-debug-log="codex_prompt" type="button">
+                Prompt
+              </button>
+              <button class="tab-button" data-debug-log="codex_stdout" type="button">
+                Stdout
+              </button>
+              <button class="tab-button" data-debug-log="codex_stderr" type="button">
+                Stderr
+              </button>
+              <button class="tab-button" data-debug-log="codex_last_message" type="button">
+                Last Message
+              </button>
+            </div>
+            <span class="debug-note">Visible in development mode only.</span>
+          </div>
+          <pre id="debug-output" class="debug-output empty-state">
+Select a running or completed job to inspect Codex logs.
+          </pre>
+        </section>
+
+        <button id="debug-entry" class="debug-entry hidden" type="button">Open Dev Console</button>
+      </main>
+    </div>
+
+    <script src="./config.js"></script>
+    <script src="./app.js"></script>
+  </body>
+</html>

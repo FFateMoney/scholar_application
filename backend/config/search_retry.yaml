@@ -1,0 +1,4 @@
+sleep_seconds: 20
+max_rounds: 40
+stale_round_limit: 12
+require_empty_failures: true

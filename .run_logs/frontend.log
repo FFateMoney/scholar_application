@@ -1,0 +1,9 @@
+127.0.0.1 - - [21/Apr/2026 17:56:28] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [21/Apr/2026 17:56:28] "GET /styles.css HTTP/1.1" 200 -
+127.0.0.1 - - [21/Apr/2026 17:56:29] "GET /config.js HTTP/1.1" 200 -
+127.0.0.1 - - [21/Apr/2026 17:56:29] "GET /app.js HTTP/1.1" 200 -
+127.0.0.1 - - [21/Apr/2026 17:56:29] code 404, message File not found
+127.0.0.1 - - [21/Apr/2026 17:56:29] "GET /favicon.ico HTTP/1.1" 404 -
+Serving HTTP on 127.0.0.1 port 4173 (http://127.0.0.1:4173/) ...
+
+Keyboard interrupt received, exiting.
